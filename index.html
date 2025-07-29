@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Find the Hidden Gem</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    table {
+      margin: 0 auto;
+      border-collapse: collapse;
+    }
+
+    td {
+      width: 60px;
+      height: 60px;
+      border: 2px solid #333;
+      font-size: 24px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    input, button {
+      margin: 10px;
+      padding: 8px 12px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Find the Hidden Gem!</h1>
+  <table id="gameBoard"></table>
+
+  <div>
+    <input type="number" id="guessInput" placeholder="Enter 1-9" />
+    <button onclick="makeGuess()">Submit</button>
+    <button onclick="clearBoard()">Clear</button>
+  </div>
+
+  <div id="message"></div>
+
+  <script>
+    let board = Array(9).fill("");
+    let gemPos = Math.floor(Math.random() * 9) + 1;
+
+    function renderBoard() {
+      const table = document.getElementById("gameBoard");
+      table.innerHTML = "";
+      for (let row = 0; row < 3; row++) {
+        const tr = document.createElement("tr");
+        for (let col = 0; col < 3; col++) {
+          const cellIndex = row * 3 + col;
+          const td = document.createElement("td");
+          td.textContent = board[cellIndex];
+          tr.appendChild(td);
+        }
+        table.appendChild(tr);
+      }
+    }
+
+    function makeGuess() {
+      const guess = parseInt(document.getElementById("guessInput").value);
+      const message = document.getElementById("message");
+
+      if (isNaN(guess) || guess < 1 || guess > 9) {
+        message.textContent = "Please use valid numbers from 1 to 9 only for your guess!";
+        return;
+      }
+
+      if (guess === gemPos) {
+        board[guess - 1] = "X";
+        message.textContent = "Congrats! You found the gem!";
+      } else {
+        if (board[guess - 1] === "") {
+          board[guess - 1] = "O";
+        }
+        message.textContent = "Try again!!";
+      }
+
+      renderBoard();
+    }
+
+    function clearBoard() {
+      board = Array(9).fill("");
+      gemPos = Math.floor(Math.random() * 9) + 1;
+      document.getElementById("message").textContent = "";
+      document.getElementById("guessInput").value = "";
+      renderBoard();
+    }
+
+    // Initial render
+    renderBoard();
+  </script>
+
+</body>
+</html>
